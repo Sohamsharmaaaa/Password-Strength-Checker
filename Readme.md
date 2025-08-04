@@ -6,7 +6,7 @@ and provides a **strength score** (Weak, Moderate, Strong).
 
 ---
 
-## 📌 Features
+##  Features
 - ✅ **Entropy-based strength calculation**
 - ✅ Checks against **banned passwords list**
 - ✅ Detects **weak patterns** (e.g., "qwerty", "1234")
@@ -18,7 +18,7 @@ and provides a **strength score** (Weak, Moderate, Strong).
 
 ---
 
-## 🚀 Installation & Setup
+##  Installation & Setup
 
 ### 1️ Clone this repository
 ```bash
@@ -26,7 +26,10 @@ git clone https://github.com/yourusername/password_checker.git
 cd password_checker
 ```
 ### 2️ Install dependencies
+```bash
+
 pip install flask flask-cors
+```
 
 ### 3️ Add password lists
 Make sure you have:
@@ -35,12 +38,14 @@ banned.txt → list of completely banned passwords
 weak_pass.txt → list of weak/common passwords
 
 ### 4 Run the Flask server
+```bash
 python app.py
-
+```
 ### 5️ Open in browser
 Visit:
-
+```bash
 http://127.0.0.1:5000/
+```
 
 📖 How It Works
 User enters a password.
