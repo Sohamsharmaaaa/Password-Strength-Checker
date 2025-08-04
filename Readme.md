@@ -20,31 +20,30 @@ and provides a **strength score** (Weak, Moderate, Strong).
 
 ---
 
-## 📂 Folder Structure
-password_checker/ │── app.py # Flask backend │── banned_passwords.txt # List of banned passwords │── weak_passwords.txt # List of weak passwords │── templates/ │ └── index.html # Frontend (Tailwind CSS) │── static/ │ └── style.css # Optional custom styles │── README.md # Documentation
-
-
----
-
 ## 🚀 Installation & Setup
 
-### 1️⃣ Clone this repository
+### 1️ Clone this repository
 ```bash
 git clone https://github.com/yourusername/password_checker.git
 cd password_checker
-2️⃣ Install dependencies
+```
+### 2️ Install dependencies
 pip install flask flask-cors
-3️⃣ Add password lists
+
+### 3️ Add password lists
 Make sure you have:
 
-banned_passwords.txt → list of completely banned passwords
-weak_passwords.txt → list of weak/common passwords
-4️⃣ Run the Flask server
+banned.txt → list of completely banned passwords
+weak_pass.txt → list of weak/common passwords
+
+### 4 Run the Flask server
 python app.py
-5️⃣ Open in browser
+
+### 5️ Open in browser
 Visit:
 
 http://127.0.0.1:5000/
+
 📖 How It Works
 User enters a password.
 
@@ -59,13 +58,17 @@ Detects common keyboard patterns.
 Returns:
 
 Strength (Weak, Moderate, Strong)
+
 Entropy in bits
 List of issues found
+
 🎨 Dark & Light Mode
 Click the mode toggle button in the navbar to switch between dark and light themes instantly.
+
 ⚠️ Security Note
 Passwords are never stored or sent to any third-party service.
 All checks happen locally on your server.
+
 📜 License
 This project is open-source under the MIT License.
 
@@ -78,5 +81,3 @@ Frontend: Tailwind CSS
 Extra: Smooth scroll, animations, dark mode
 
 ---
-
-Do you want me to also include **example screenshots** and a **demo GIF** in the README so it looks like a professional GitHub project? That would make it look polished.
