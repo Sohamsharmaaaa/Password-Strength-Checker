@@ -22,7 +22,7 @@ and provides a **strength score** (Weak, Moderate, Strong).
 
 ### 1️ Clone this repository
 ```bash
-git clone https://github.com/yourusername/password_checker.git
+https://github.com/Sohamsharmaaaa/Password-Strength-Checker.git
 cd password_checker
 ```
 ### 2️ Install dependencies
