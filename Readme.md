@@ -1,5 +1,3 @@
-Here’s a README.md for your password strength checker project without GPT:
-
 # 🔐 Advanced Password Strength Checker
 
 A modern **password strength checker** built with **Flask** (Python) and a responsive **Tailwind CSS frontend**.  
