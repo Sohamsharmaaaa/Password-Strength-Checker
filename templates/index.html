@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Strength Checker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind custom theme colors
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            darkbg: "#0f172a",
+            darkcard: "#1e293b",
+            accent: "#3b82f6"
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .fade-in { animation: fadeIn 0.6s ease-in-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .smooth-hover { transition: all 0.3s ease; }
+  </style>
+</head>
+<body class="bg-darkbg text-white min-h-screen transition-colors duration-500" id="body">
+
+  <!-- Navbar -->
+  <nav class="fixed w-full bg-darkcard shadow-lg z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <span class="text-2xl font-bold text-accent">🔐 PassCheck</span>
+      <div class="flex gap-6 items-center">
+        <a href="#checker" class="hover:text-accent smooth-hover">Checker</a>
+        <a href="#tips" class="hover:text-accent smooth-hover">Tips</a>
+        <button onclick="toggleTheme()" class="bg-accent px-3 py-1 rounded-lg text-white smooth-hover hover:bg-blue-500">🌙</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="h-screen flex flex-col justify-center items-center text-center px-4 fade-in">
+    <h1 class="text-5xl font-extrabold text-accent mb-4">Test Your Password Strength</h1>
+    <p class="text-lg text-gray-300 max-w-xl">Advanced entropy analysis, dictionary checks, and Suggestions to Strong password.</p>
+    <a href="#checker" class="mt-6 bg-accent px-6 py-3 rounded-lg text-lg font-semibold hover:bg-blue-500 smooth-hover">Get Started</a>
+  </section>
+
+  <!-- Password Checker -->
+  <section id="checker" class="max-w-xl mx-auto mt-20 p-8 bg-darkcard rounded-xl shadow-lg fade-in">
+    <h2 class="text-3xl font-bold text-accent text-center mb-6">🔍 Password Strength Checker</h2>
+    <div class="relative mb-4">
+      <input type="password" id="password" placeholder="Enter your password"
+             class="w-full p-3 border border-gray-600 rounded-lg bg-darkbg focus:outline-none focus:ring-2 focus:ring-accent text-white" />
+      <span class="absolute right-3 top-3 cursor-pointer" onclick="togglePassword()">👁️</span>
+    </div>
+    <button onclick="checkPassword()"
+            class="w-full bg-accent py-2 rounded-lg font-semibold hover:bg-blue-500 smooth-hover">
+      Check Strength
+    </button>
+    <div id="result" class="mt-6 hidden">
+      <h3 id="strength" class="text-xl font-bold mb-2"></h3>
+      <p>Entropy: <span id="entropy" class="font-mono"></span></p>
+      <div class="w-full bg-gray-700 h-2 rounded-full mt-2">
+        <div id="entropy-bar" class="h-full rounded-full transition-all duration-500"></div>
+      </div>
+      <ul id="issues" class="text-red-400 text-sm mt-4 text-left"></ul>
+    </div>
+  </section>
+
+
+  <!-- Tips -->
+  <section id="tips" class="max-w-4xl mx-auto my-20 px-6 fade-in">
+    <h2 class="text-3xl font-bold text-accent mb-4">🔐 Password Tips</h2>
+    <ul class="list-disc pl-6 space-y-2 text-gray-300">
+      <li>Use at least 12 characters</li>
+      <li>Mix uppercase, lowercase, numbers, and symbols</li>
+      <li>Avoid dictionary words and common patterns</li>
+      <li>Never reuse passwords</li>
+      <li>Consider using a password manager</li>
+    </ul>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-darkcard text-center py-6 mt-10 text-gray-400">
+    Made with ❤️ by Team HackerBagPaq
+  </footer>
+
+  <script>
+    let darkMode = true;
+    function toggleTheme() {
+      const body = document.getElementById("body");
+      darkMode = !darkMode;
+      if (darkMode) {
+        body.classList.remove("bg-white", "text-black");
+        body.classList.add("bg-darkbg", "text-white");
+      } else {
+        body.classList.remove("bg-darkbg", "text-white");
+        body.classList.add("bg-white", "text-black");
+      }
+    }
+
+    function togglePassword() {
+      const input = document.getElementById("password");
+      input.type = input.type === "password" ? "text" : "password";
+    }
+
+    async function checkPassword() {
+      const password = document.getElementById("password").value;
+      if (!password) return;
+      const res = await fetch("/check", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ password })
+      });
+      const data = await res.json();
+      document.getElementById("result").classList.remove("hidden");
+      const strengthEl = document.getElementById("strength");
+      strengthEl.textContent = `Strength: ${data.strength}`;
+      strengthEl.className = "text-xl font-bold mb-2 " +
+        (data.strength === "Strong" ? "text-green-400" : data.strength === "Moderate" ? "text-yellow-400" : "text-red-400");
+      document.getElementById("entropy").textContent = data.entropy;
+      const bar = document.getElementById("entropy-bar");
+      bar.style.width = `${Math.min(data.entropy, 100)}%`;
+      bar.className = `h-full rounded-full transition-all duration-500 ${data.entropy >= 70 ? "bg-green-400" : data.entropy >= 50 ? "bg-yellow-400" : "bg-red-400"}`;
+      const issuesList = document.getElementById("issues");
+      issuesList.innerHTML = "";
+      data.issues.forEach(issue => {
+        const li = document.createElement("li");
+        li.innerText = `⚠️ ${issue}`;
+        issuesList.appendChild(li);
+      });
+    }
+
+    async function askGPT() {
+      const question = document.getElementById("chat-input").value;
+      if (!question) return;
+      document.getElementById("chat-response").innerText = "Thinking...";
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ question })
+      });
+      const data = await res.json();
+      document.getElementById("chat-response").innerText = data.response;
+    }
+  </script>
+</body>
+</html>
